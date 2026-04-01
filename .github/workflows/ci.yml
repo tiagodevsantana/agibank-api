@@ -1,43 +1,11 @@
-name: CI - API Tests (Java)
+name: CI - API Tests + Allure Report
 
 on:
   push:
     branches: [ main ]
-  pull_request:
 
 jobs:
-
   test:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        java: [11, 17, 21]
-
-    steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: ${{ matrix.java }}
-
-      - name: Dar permissão ao mvnw
-        run: chmod +x mvnw
-
-      - name: Rodar testes
-        run: ./mvnw clean test
-
-      - name: Upload resultados Allure
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results-${{ matrix.java }}
-          path: target/allure-results
-
-  report:
-    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -50,22 +18,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Baixar TODOS os resultados Allure
-        uses: actions/download-artifact@v4
-        with:
-          path: target/allure-results
-
       - name: Dar permissão ao mvnw
         run: chmod +x mvnw
+
+      - name: Rodar testes
+        run: ./mvnw clean test
 
       - name: Gerar relatório Allure
         run: ./mvnw allure:report
 
-      - name: Deploy Allure para GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy Allure no GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: target/site/allure-maven-plugin
-          publish_branch: gh-pages
-          force_orphan: true
-          keep_files: false
+          publish_dir: ./target/site/allure-maven-plugin
