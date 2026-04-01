@@ -1,1 +1,1 @@
-{"total":0,"items":[]}
+{"total":3,"items":[{"uid":"b78c627ecea522349dec8487cd967b61","name":"Breed Images","statistic":{"failed":0,"broken":0,"skipped":0,"passed":11,"unknown":0,"total":11}},{"uid":"91f7fb6993958e9ec9649fc6aba84a0b","name":"Random Image","statistic":{"failed":0,"broken":0,"skipped":0,"passed":7,"unknown":0,"total":7}},{"uid":"283ea75b5057991bbc3aa16b13990c21","name":"Breeds List All","statistic":{"failed":0,"broken":0,"skipped":0,"passed":6,"unknown":0,"total":6}}]}
