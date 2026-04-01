@@ -23,5 +23,8 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ matrix.java }}
 
+      - name: Dar permissão ao mvnw
+        run: chmod +x mvnw
+
       - name: Rodar testes com Maven
         run: ./mvnw test
