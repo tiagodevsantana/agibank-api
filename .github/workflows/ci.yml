@@ -30,6 +30,12 @@ jobs:
       - name: Rodar testes
         run: ./mvnw clean test
 
+      - name: Upload resultados Allure
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-results
+          path: target/allure-results
+
   report:
     needs: test
     runs-on: ubuntu-latest
@@ -43,6 +49,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Baixar resultados Allure
+        uses: actions/download-artifact@v3
+        with:
+          name: allure-results
+          path: target/allure-results
 
       - name: Dar permissão ao mvnw
         run: chmod +x mvnw
