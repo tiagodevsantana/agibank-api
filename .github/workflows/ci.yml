@@ -27,4 +27,15 @@ jobs:
         run: chmod +x mvnw
 
       - name: Rodar testes com Maven
-        run: ./mvnw test
+        run: ./mvnw clean test
+
+      - name: Gerar relatório Allure
+        run: ./mvnw allure:report
+
+      - name: Deploy Allure para GitHub Pages
+        if: matrix.java == '17'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: target/site/allure-maven-plugin
+          publish_branch: gh-pages
