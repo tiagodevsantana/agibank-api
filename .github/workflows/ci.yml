@@ -6,6 +6,7 @@ on:
   pull_request:
 
 jobs:
+
   test:
     runs-on: ubuntu-latest
 
@@ -26,14 +27,30 @@ jobs:
       - name: Dar permissão ao mvnw
         run: chmod +x mvnw
 
-      - name: Rodar testes com Maven
+      - name: Rodar testes
         run: ./mvnw clean test
+
+  report:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Dar permissão ao mvnw
+        run: chmod +x mvnw
 
       - name: Gerar relatório Allure
         run: ./mvnw allure:report
 
       - name: Deploy Allure para GitHub Pages
-        if: matrix.java == '17'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
