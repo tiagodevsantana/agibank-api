@@ -1,61 +1,27 @@
-name: Dog API – CI
+name: CI - API Tests (Java)
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main", "master" ]
 
 jobs:
   test:
-    name: Tests – Java ${{ matrix.java }}
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: false
       matrix:
-        java: [ "11", "17", "21" ]
+        java: [11, 17, 21]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout código
+        uses: actions/checkout@v3
 
-      - name: Set up JDK ${{ matrix.java }}
-        uses: actions/setup-java@v4
+      - name: Setup Java
+        uses: actions/setup-java@v3
         with:
-          distribution: temurin
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
-          cache: maven
 
-      - name: Make mvnw executable
-        run: chmod +x mvnw
-
-      - name: Run tests
-        run: ./mvnw test --no-transfer-progress
-
-      - name: Generate Allure report
-        if: always()
-        run: ./mvnw allure:report --no-transfer-progress
-
-      - name: Upload Allure results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results-java${{ matrix.java }}
-          path: target/allure-results/
-
-      - name: Upload Allure HTML report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report-java${{ matrix.java }}
-          path: target/site/allure-maven-plugin/
-
-      - name: Test summary
-        if: always()
-        uses: dorny/test-reporter@v1
-        with:
-          name: JUnit Results – Java ${{ matrix.java }}
-          path: target/surefire-reports/*.xml
-          reporter: java-junit
-          fail-on-error: false
+      - name: Rodar testes com Maven
+        run: ./mvnw test
